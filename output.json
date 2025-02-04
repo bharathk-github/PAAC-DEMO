@@ -5,7 +5,7 @@
             "type": "start",
             "start": ["60b03f0618d51424d770bcc4bb661f"]
         },
-        "bbva-shell-script": {
+        "shell-script": {
             "type": "plugin",
             "plugin": "Shell",
             "command": "Shell",
@@ -104,7 +104,7 @@
             "lock": "${p:component.name}-${p:componentProcess.name}-${p:resource.name}",
             "on": {
                 "success": {
-                    "start": ["bbva-shell-script"]
+                    "start": ["shell-script"]
                 }
             }
         },
