@@ -1,0 +1,184 @@
+{
+    "process-name": "PAC-COMPREHENSIVE-PROCESS",
+    "process": {
+        "start": {
+            "type": "start",
+            "start": ["60b03f0618d51424d770bcc4bb661f"]
+        },
+        "bbva-shell-script": {
+            "type": "plugin",
+            "plugin": "Shell",
+            "command": "Shell",
+            "properties": {
+                "directoryOffset": ".",
+                "shellInterpreter": "",
+                "scriptBody": "scriptFile\/Generic-PAC-COMPREHENSIVE-PROCESS-bbva-shell-script.txt",
+                "runAsDaemon": "false",
+                "outputFile": "",
+                "tempDirectory": "${p?:agent\/temporaryDirectory}"
+            },
+            "on": {
+                "success": {
+                    "start": ["0c08086b7e5f13eee8ce02b772d4a4"]
+                }
+            }
+        },
+        "Create Application": {
+            "type": "plugin",
+            "plugin": "UrbanCode Deploy Applications",
+            "command": "Create Application",
+            "properties": {
+                "application": "PAC-APP-NAME",
+                "description": "",
+                "notificationScheme": "",
+                "enforceCompleteSnapshots": "false"
+            },
+            "on": {
+                "success": {
+                    "start": ["5311360e844eb79473472a15416406"]
+                }
+            }
+        },
+        "Create Application From Template": {
+            "type": "plugin",
+            "plugin": "UrbanCode Deploy Applications",
+            "command": "Create Application From Template",
+            "properties": {
+                "application": "PAC-APP-FROM-TEMPLATE",
+                "description": "",
+                "templateName": "",
+                "templateId": "",
+                "templateVersion": "",
+                "existingComponentIds": "",
+                "notificationScheme": "",
+                "enforceCompleteSnapshots": "false"
+            },
+            "on": {
+                "success": {
+                    "start": ["5311360e844eb79473472a15416406"]
+                }
+            }
+        },
+        "Create Component": {
+            "type": "plugin",
+            "plugin": "UrbanCode Deploy Components",
+            "command": "Create Component",
+            "properties": {
+                "component": "PAC-COMPONENT",
+                "description": "",
+                "template": "",
+                "templateVersion": "",
+                "sourceConfig": "None",
+                "defaultVersionType": "Full",
+                "importAutomatically": "false",
+                "useVfs": "false",
+                "sourceConfigProps": ""
+            },
+            "on": {
+                "success": {
+                    "start": ["5311360e844eb79473472a15416406"]
+                }
+            }
+        },
+        "5311360e844eb79473472a15416406": {
+            "type": "join",
+            "on": {
+                "start": ["f0aaf2bdc4f4c19bde9f7b3dbca995"]
+            }
+        },
+        "switch-on-shell": {
+            "type": "switch",
+            "evaluate": "${p:shell\/ReturnCode}",
+            "case": {
+                "DEFAULT": {
+                    "start": [
+                        "Create Application",
+                        "Create Application From Template",
+                        "Create Component"
+                    ]
+                }
+            }
+        },
+        "60b03f0618d51424d770bcc4bb661f": {
+            "type": "acquire-lock",
+            "lock": "${p:component.name}-${p:componentProcess.name}-${p:resource.name}",
+            "on": {
+                "success": {
+                    "start": ["bbva-shell-script"]
+                }
+            }
+        },
+        "0c08086b7e5f13eee8ce02b772d4a4": {
+            "type": "release-lock",
+            "lock": "${p:component.name}-${p:componentProcess.name}-${p:resource.name}",
+            "on": {
+                "success": {
+                    "start": ["APPROVAL-TASK"]
+                }
+            }
+        },
+        "f0aaf2bdc4f4c19bde9f7b3dbca995": {
+            "type": "set-final-process-status",
+            "status": "success",
+            "on": {
+                "success": {
+                    "finish": ""
+                }
+            }
+        },
+        "APPROVAL-TASK": {
+            "type": "generic-manual-task",
+            "restrict-approval-to": {
+                "identities": {
+                    "users": [
+                        "deploy",
+                        "admin"
+                    ],
+                    "groups": []
+                }
+            },
+            "notification-template": "TaskCreated",
+            "comment-required": false,
+            "property-definition": [
+                {
+                    "property-name": "TEXT-PROPERTY-1",
+                    "property-type": "text",
+                    "label": "TEXT-PROPERTY-1"
+                },
+                {
+                    "property-name": "CHECKBOX-PROPERTY",
+                    "property-type": "checkbox",
+                    "label": "CHECKBOX-PROPERTY",
+                    "required": true,
+                    "default": true
+                },
+                {
+                    "property-name": "MULTI-SELECT-PROPERTY",
+                    "property-type": "multi-select",
+                    "values": [
+                        {
+                            "label": "RED",
+                            "selected": true,
+                            "value": "RED"
+                        },
+                        {
+                            "label": "GREEN",
+                            "selected": true,
+                            "value": "GREEN"
+                        },
+                        {
+                            "label": "BLUE",
+                            "value": "BLUE"
+                        }
+                    ],
+                    "label": "MULTI-SELECT-PROPERTY"
+                }
+            ],
+            "on": {
+                "success": {
+                    "start": ["switch-on-shell"]
+                }
+            }
+        }
+    }
+}
