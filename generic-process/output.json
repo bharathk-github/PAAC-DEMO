@@ -12,7 +12,7 @@
             "properties": {
                 "directoryOffset": ".",
                 "shellInterpreter": "",
-                "scriptBody": "scriptFile\/Generic-PAC-COMPREHENSIVE-PROCESS-bbva-shell-script.txt",
+                "scriptBody": "scriptFile\/generic-process/Generic-PAC-COMPREHENSIVE-PROCESS-bbva-shell-script.txt",
                 "runAsDaemon": "false",
                 "outputFile": "",
                 "tempDirectory": "${p?:agent\/temporaryDirectory}"
