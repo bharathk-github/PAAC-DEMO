@@ -93,9 +93,11 @@
                 "DEFAULT": {
                     "start": [
                         "Create Application",
-                        "Create Application From Template",
-                        "Create Component"
+                        "Create Application From Template"
                     ]
+                },
+                "1" : {
+                    "start" : ["Create Component"]
                 }
             }
         },
