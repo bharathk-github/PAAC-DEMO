@@ -1,13 +1,14 @@
 name: Upload process to server
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master 
 
 jobs:
   build:
-    runs-on: [self-hosted, ubuntu] 
+    runs-on: PAAC 
 
     steps:
       - name: Checkout the repository
