@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: PAAC 
+    runs-on: ubuntu 
 
     steps:
       - name: Checkout the repository
