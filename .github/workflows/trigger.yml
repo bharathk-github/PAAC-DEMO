@@ -14,10 +14,16 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
 
-      - name: List all files in the repository
+      - name: Find and upload changed .json files in generic-process
         run: |
-          echo "Looking for .json files..."
-          find . -name "*.json" -type f | while read file; do
-            echo "Processing $file..."
-            upload-generic-process admin admin https://10.134.119.177:8443 "$file"
+          echo "Finding changed .json files in generic-process directory..."
+          # Get the list of changed .json files in the generic-process directory
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- ./generic-process/*.json)
+          
+          # If there are changed files, upload them
+          for file in $changed_files; do
+            if [ -f "$file" ]; then
+              echo "Processing $file with upload-generic-process"
+              upload-generic-process admin admin https://10.134.119.177:8443 "$file"
+            fi
           done
