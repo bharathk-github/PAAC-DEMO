@@ -24,6 +24,6 @@ jobs:
           for file in $changed_files; do
             if [ -f "$file" ]; then
               echo "Processing $file with upload-generic-process"
-              upload-generic-process admin admin https://10.134.119.177:8443 "$file"
+              upload-generic-process admin admin https://10.134.119.177:8443 "$file" "lloyds demo"
             fi
           done
